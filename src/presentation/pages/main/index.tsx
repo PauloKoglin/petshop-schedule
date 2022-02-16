@@ -1,13 +1,16 @@
 import { ChakraProvider } from '@chakra-ui/react'
 
-import Header from '../../components/header'
+import Header from './components/header'
 import Calendar from './components/calendar';
+import './styles.css'
 
 const Main = () => {
   return (    
     <ChakraProvider>
-        <Header/>
-        <Calendar/>
+        <div className='container'>
+            <Header/>
+            <Calendar/>
+        </div>
     </ChakraProvider>
   )
 }
