@@ -1,4 +1,4 @@
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Flex } from '@chakra-ui/react'
 
 import Header from './components/header'
 import Calendar from './components/calendar';
@@ -7,10 +7,10 @@ import './styles.css'
 const Main = () => {
   return (    
     <ChakraProvider>
-        <div className='container'>
+        <Flex className='main-container'>
             <Header/>
             <Calendar/>
-        </div>
+        </Flex>
     </ChakraProvider>
   )
 }
