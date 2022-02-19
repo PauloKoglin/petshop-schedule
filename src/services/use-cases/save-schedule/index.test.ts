@@ -1,6 +1,6 @@
-import { SaveSchedule } from "../../domain/use-cases"
-import { SaveScheduleInCache } from "."
-import { CacheStorage } from '../contracts'
+import { SaveSchedule } from "../../../domain/use-cases"
+import { SaveScheduleInCache } from ".."
+import { CacheStorage } from '../../contracts'
 
 import { mock, MockProxy } from 'jest-mock-extended'
 

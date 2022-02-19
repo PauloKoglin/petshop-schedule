@@ -1,5 +1,5 @@
-import { SaveSchedule } from "../../domain/use-cases"
-import { CacheStorage } from "../contracts"
+import { SaveSchedule } from "../../../domain/use-cases"
+import { CacheStorage } from "../../contracts"
 
 export class SaveScheduleInCache implements SaveSchedule {
     private static fieldName: string = 'schedules'
