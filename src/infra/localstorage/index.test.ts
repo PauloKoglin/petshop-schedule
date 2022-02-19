@@ -24,4 +24,22 @@ describe('LocalStorage', () => {
         const localstorageValue = window.localStorage.getItem('any_key')
         expect(localstorageValue ? JSON.parse(localstorageValue) : undefined).toEqual(value)
     })
+
+    it('should get value from localstorage', () => {     
+        const value: any = { attribute1: 'attr1', attribute2: 'attr2'}   
+        window.localStorage.setItem('any_key', JSON.stringify(value)) 
+
+        const result: Object = sut.get('any_key')
+
+        expect(result).toEqual(value)
+    })
+
+    it('should return undefined when key is not found', () => {     
+        const value: any = { attribute1: 'attr1', attribute2: 'attr2'}   
+        window.localStorage.setItem('any_key', JSON.stringify(value)) 
+
+        const result: Object = sut.get('any_value')
+
+        expect(result).toBeUndefined()
+    })
 })
