@@ -1,4 +1,4 @@
-import { ScheduleService } from "./schedule-service";
+import { ScheduleService } from "../types/enums";
 
 export interface Schedule {
     petName: string,
