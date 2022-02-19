@@ -10,11 +10,16 @@ type CalendarProps = {
 }
 
 const Calendar: React.FC<CalendarProps> = ({ localizer }: CalendarProps) => {
-    const [schedules] = useState<Event[]>([])  
+    const [schedules, setSchedules] = useState<Event[]>([])  
     const [schedulerModalVisible, setEventModalVisible] = useState<boolean>(false)
     const [selectedSlot, setSelectedSlot] = useState<SlotInfo>()
-  
+
     const onSelectSlot = (slotInfo: SlotInfo) => {
+        const newSchedule: Event = {
+          start: new Date(slotInfo.start),
+          end: new Date(slotInfo.end)
+        }
+        setSchedules([...schedules, newSchedule])
         setSelectedSlot(slotInfo)
         setEventModalVisible(true)
     }
@@ -23,14 +28,23 @@ const Calendar: React.FC<CalendarProps> = ({ localizer }: CalendarProps) => {
         return selectedSlot?.start ? new Date(selectedSlot.start) : new Date()
     }
 
+    const getDefaultScheduleStartTime = (): number => {
+      return selectedSlot?.start ? new Date(selectedSlot.start).getTime() : new Date().getTime()
+    }
+
+    const getDefaultScheduleEndTime = (): number => {
+      return selectedSlot?.end ? new Date(selectedSlot.end).getTime() : new Date().getTime()
+    }
+
     const onCloseScheduler = () => {
       setEventModalVisible(false)
+      setSchedules([])
     }
 
     const onScheduleSaved = () => {
       setEventModalVisible(false)
     }
-    
+
     return (
         <div className='calendar'>
             <ReactCalendar
@@ -38,20 +52,22 @@ const Calendar: React.FC<CalendarProps> = ({ localizer }: CalendarProps) => {
                 events={schedules}
                 selectable={true}
                 views={{
-                  day: true,
                   week: true,
                   month: true
                 }}
                 startAccessor="start"
                 endAccessor="end"
-                onSelectSlot={(slotInfo: SlotInfo) => onSelectSlot(slotInfo)}>
+                onSelectSlot={(slotInfo: SlotInfo) => onSelectSlot(slotInfo)}
+            >
             </ReactCalendar>
             {
               schedulerModalVisible &&
               <ScheduleModal
+                  defaultDate={getDefaultScheduleDate()}
+                  defaultStartTime={getDefaultScheduleStartTime()}
+                  defaultEndTime={getDefaultScheduleEndTime()}
                   onScheduleClose={onCloseScheduler} 
                   onScheduleSaved={onScheduleSaved}
-                  defaultDate={getDefaultScheduleDate()}   
               />
             }
         </div>

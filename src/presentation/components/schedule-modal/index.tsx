@@ -18,8 +18,9 @@ import {
     Stack} from '@chakra-ui/react'
 
 type EventProps = {
-    showing?: boolean;
     defaultDate: Date,
+    defaultStartTime: number,
+    defaultEndTime: number
     schedule?: Schedule,
     onScheduleSaved: () => void
     onScheduleClose: () => void
@@ -33,14 +34,14 @@ type ScheduleState = {
     endTime: number
 }
 
-const ScheduleModal: React.FC<EventProps> = ({ showing, defaultDate, schedule, onScheduleSaved, onScheduleClose }: EventProps) => {
+const ScheduleModal: React.FC<EventProps> = ({ defaultDate, defaultStartTime, defaultEndTime, schedule, onScheduleSaved, onScheduleClose }: EventProps) => {
     const [visible, setVisible] = useState<boolean>(true)
     const [state] = useState<ScheduleState>({
         name: schedule ? schedule.petName : '',
         owner: schedule ? schedule.ownerName : '',
         date: schedule ? schedule.startDate : defaultDate,
-        startTime: schedule ? schedule.startDate.getTime() : defaultDate.getTime(),
-        endTime: schedule ? schedule.endDate.getTime() : defaultDate.getTime(),
+        startTime: schedule ? schedule.startDate.getTime() : defaultStartTime,
+        endTime: schedule ? schedule.endDate.getTime() : defaultEndTime,
     })
 
     const onCloseModal = () => {
@@ -53,6 +54,8 @@ const ScheduleModal: React.FC<EventProps> = ({ showing, defaultDate, schedule, o
         setVisible(false)
         onScheduleSaved()
     }
+
+    console.log(state)
 
     return (    
         <Modal 
