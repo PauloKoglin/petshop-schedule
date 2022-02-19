@@ -17,7 +17,7 @@ import {
     ModalHeader,
     Stack} from '@chakra-ui/react'
 
-type EventProps = {
+type ScheduleModalProps = {
     defaultDate: Date,
     defaultStartTime: number,
     defaultEndTime: number
@@ -34,7 +34,7 @@ type ScheduleState = {
     endTime: number
 }
 
-const ScheduleModal: React.FC<EventProps> = ({ defaultDate, defaultStartTime, defaultEndTime, schedule, onScheduleSaved, onScheduleClose }: EventProps) => {
+const ScheduleModal: React.FC<ScheduleModalProps> = ({ defaultDate, defaultStartTime, defaultEndTime, schedule, onScheduleSaved, onScheduleClose }: ScheduleModalProps) => {
     const [visible, setVisible] = useState<boolean>(true)
     const [state] = useState<ScheduleState>({
         name: schedule ? schedule.petName : '',

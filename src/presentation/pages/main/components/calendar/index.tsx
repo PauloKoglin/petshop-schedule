@@ -1,11 +1,11 @@
 import './styles.css'
 import ScheduleModal from '../../../../components/schedule-modal'
+import { Month } from '../../../../../domain/types/enums'
+import { LoadSchedule } from '../../../../../domain/use-cases'
 
 import { useEffect, useState } from 'react'
 import { Calendar as ReactCalendar, SlotInfo, Event, DateLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
-import { LoadSchedule } from '../../../../../domain/use-cases'
-import { Month } from '../../../../../domain/types/enums'
 
 type CalendarProps = {
     localizer: DateLocalizer
