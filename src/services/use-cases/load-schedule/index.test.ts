@@ -48,4 +48,12 @@ describe('LoadScheduleFromCache', () => {
         expect(result).toHaveLength(1)
         expect(result[0]).toEqual(februarySchedule)
     })
+
+    it('should return empty when cache returns empty', async () => {
+        cacheMock.get.mockReturnValueOnce([])
+
+        const result: LoadSchedule.Model = await sut.loadByMonth({ month: Month.january })
+
+        expect(result).toHaveLength(0)
+    })
 })
