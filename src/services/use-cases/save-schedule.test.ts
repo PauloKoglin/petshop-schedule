@@ -1,24 +1,12 @@
 import { SaveSchedule } from "../../domain/use-cases"
+import { SaveScheduleInCache } from "."
+import { CacheStorage } from '../contracts'
+
 import { mock, MockProxy } from 'jest-mock-extended'
-
-interface Cache {
-    set: (field: string, value: Object) => void
-}
-
-class SaveScheduleInCache implements SaveSchedule {
-    private static fieldName: string = 'schedules'
-
-    constructor (private readonly cache: Cache) {}
-
-    public perform(input: SaveSchedule.Input): Promise<SaveSchedule.Model> {
-        this.cache.set(SaveScheduleInCache.fieldName, input)
-        return Promise.resolve(input)
-    }    
-}
 
 describe('SaveScheduleInCache', () => {
     let sut: SaveSchedule
-    let cacheMock: MockProxy<Cache>
+    let cacheMock: MockProxy<CacheStorage>
 
     beforeEach(() => {
         cacheMock = mock()
