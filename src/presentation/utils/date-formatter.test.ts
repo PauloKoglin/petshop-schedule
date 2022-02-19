@@ -1,8 +1,4 @@
-import fnsFormat from 'date-fns/format'
-
-const formatDate = (date: Date): string => {
-    return fnsFormat(date, 'yyyy-MM-dd')
-}
+import { formatDate } from "./date-formatter"
 
 describe('date-formatter', () => {
     it('should return date in format of yyyy-MM-dd', () => {
