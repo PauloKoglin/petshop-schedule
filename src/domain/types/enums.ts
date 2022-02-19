@@ -12,3 +12,8 @@ export enum Month {
     november = 11,
     december = 12
 }
+
+export enum ScheduleService {
+    shower = 'shower',
+    shear = 'shear'
+}

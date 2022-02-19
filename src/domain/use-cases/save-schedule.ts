@@ -1,4 +1,5 @@
-import { Schedule, ScheduleService } from "../models";
+import { Schedule } from "../models";
+import { ScheduleService } from "../types/enums";
 
 export interface SaveSchedule {
     perform: (input: SaveSchedule.Input) => Promise<SaveSchedule.Model>

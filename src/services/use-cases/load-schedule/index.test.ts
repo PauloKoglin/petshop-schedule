@@ -1,21 +1,10 @@
 import { LoadSchedule } from '../../../domain/use-cases'
-import { Month } from '../../../domain/types/enums'
-
-import { mock, MockProxy } from 'jest-mock-extended'
-import { Schedule, ScheduleService } from '../../../domain/models'
+import { Month, ScheduleService } from '../../../domain/types/enums'
+import { Schedule } from '../../../domain/models'
+import { LoadScheduleFromCache } from '.'
 import { CacheStorage } from '../../contracts'
 
-class LoadScheduleFromCache implements LoadSchedule {
-
-    constructor (private readonly cache: CacheStorage) {}
-
-    public loadByMonth(input: LoadSchedule.Input): Promise<LoadSchedule.Model> {
-        const cacheResult: any = this.cache.get('schedules')
-        let schedules: LoadSchedule.Model = [...cacheResult]
-        schedules = schedules.filter(schedule => schedule.startDate.getMonth() + 1 === input.month)
-        return Promise.resolve(schedules)
-    }    
-}
+import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('LoadScheduleFromCache', () => {
     let sut: LoadSchedule
