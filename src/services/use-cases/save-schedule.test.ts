@@ -13,7 +13,7 @@ describe('SaveScheduleInCache', () => {
         sut = new SaveScheduleInCache(cacheMock)
     })
 
-    it('should call Cache with given input', async () => {        
+    it('should call Cache with given input', async () => {
         const input: SaveSchedule.Input = {
             petName: 'any_value',
             ownerName: 'any_value',
