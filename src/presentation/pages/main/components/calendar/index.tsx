@@ -1,18 +1,39 @@
 import './styles.css'
 import ScheduleModal from '../../../../components/schedule-modal'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Calendar as ReactCalendar, SlotInfo, Event, DateLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
+import { LoadSchedule } from '../../../../../domain/use-cases'
+import { Month } from '../../../../../domain/types/enums'
 
 type CalendarProps = {
     localizer: DateLocalizer
+    loadSchedule: LoadSchedule
 }
 
-const Calendar: React.FC<CalendarProps> = ({ localizer }: CalendarProps) => {
+const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule }: CalendarProps) => {
     const [schedules, setSchedules] = useState<Event[]>([])  
     const [schedulerModalVisible, setEventModalVisible] = useState<boolean>(false)
     const [selectedSlot, setSelectedSlot] = useState<SlotInfo>()
+
+    useEffect(() => {
+        loadSchedule
+            .loadByMonth({ month: Month.february})
+            .then(schedules => mapScheduleToCalendarEvent(schedules))
+            .then(events => setSchedules(events))
+    }, [])
+
+    const mapScheduleToCalendarEvent = (schedules: LoadSchedule.Model): Event[] => {
+      return schedules.map(schedule => {
+          const event: Event = {
+            title: schedule.petName,
+            start: schedule.startDate,
+            end: schedule.endDate
+          }
+          return event
+      })
+    }
 
     const onSelectSlot = (slotInfo: SlotInfo) => {
         const newSchedule: Event = {
