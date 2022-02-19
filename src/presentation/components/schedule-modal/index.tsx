@@ -1,5 +1,6 @@
 import { formatDate, formatTime } from '../../utils'
 import { Schedule } from '../../../domain/models/schedule'
+import { SaveSchedule } from '../../../domain/use-cases'
 
 import React, { useState } from 'react'
 import { 
@@ -24,6 +25,7 @@ type ScheduleModalProps = {
     schedule?: Schedule,
     onScheduleSaved: () => void
     onScheduleClose: () => void
+    saveSchedule: SaveSchedule
 }
 
 type ScheduleState = {
@@ -34,7 +36,15 @@ type ScheduleState = {
     endTime: number
 }
 
-const ScheduleModal: React.FC<ScheduleModalProps> = ({ defaultDate, defaultStartTime, defaultEndTime, schedule, onScheduleSaved, onScheduleClose }: ScheduleModalProps) => {
+const ScheduleModal: React.FC<ScheduleModalProps> = ({ 
+    defaultDate, 
+    defaultStartTime, 
+    defaultEndTime, 
+    schedule, 
+    onScheduleSaved, 
+    onScheduleClose,
+    saveSchedule }: ScheduleModalProps) => {
+        
     const [visible, setVisible] = useState<boolean>(true)
     const [state] = useState<ScheduleState>({
         name: schedule ? schedule.petName : '',

@@ -1,7 +1,7 @@
 import './styles.css'
 import ScheduleModal from '../../../../components/schedule-modal'
 import { Month } from '../../../../../domain/types/enums'
-import { LoadSchedule } from '../../../../../domain/use-cases'
+import { LoadSchedule, SaveSchedule } from '../../../../../domain/use-cases'
 
 import { useEffect, useState } from 'react'
 import { Calendar as ReactCalendar, SlotInfo, Event, DateLocalizer } from 'react-big-calendar'
@@ -10,9 +10,10 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 type CalendarProps = {
     localizer: DateLocalizer
     loadSchedule: LoadSchedule
+    saveSchedule: SaveSchedule
 }
 
-const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule }: CalendarProps) => {
+const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedule }: CalendarProps) => {
     const [schedules, setSchedules] = useState<Event[]>([])  
     const [schedulerModalVisible, setEventModalVisible] = useState<boolean>(false)
     const [selectedSlot, setSelectedSlot] = useState<SlotInfo>()
@@ -20,8 +21,8 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule }: Calendar
     useEffect(() => {
         loadSchedule
             .loadByMonth({ month: Month.february})
-            .then(schedules => mapScheduleToCalendarEvent(schedules))
-            .then(events => setSchedules(events))
+            .then(schedules => schedules && schedules.length > 0 && mapScheduleToCalendarEvent(schedules))
+            .then(events => events && setSchedules(events))
     }, [])
 
     const mapScheduleToCalendarEvent = (schedules: LoadSchedule.Model): Event[] => {
@@ -89,6 +90,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule }: Calendar
                   defaultEndTime={getDefaultScheduleEndTime()}
                   onScheduleClose={onCloseScheduler} 
                   onScheduleSaved={onScheduleSaved}
+                  saveSchedule={saveSchedule}
               />
             }
         </div>
