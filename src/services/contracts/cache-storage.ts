@@ -1,4 +1,4 @@
 export interface CacheStorage {
     set: (field: string, value: Object) => void
-    get: (field: string) => Object
+    get: (field: string) => Object | undefined
 }

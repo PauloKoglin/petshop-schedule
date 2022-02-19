@@ -6,7 +6,7 @@ export class LocalStorage implements CacheStorage {
         window.localStorage.setItem(field, JSON.stringify(value))
     }
 
-    public get(field: string): Object {
+    public get(field: string): Object | undefined {
         const value: any = window.localStorage.getItem(field)
         return value ? JSON.parse(value) : undefined
     }

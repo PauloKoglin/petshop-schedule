@@ -45,4 +45,12 @@ describe('LoadScheduleFromCache', () => {
 
         expect(result).toHaveLength(0)
     })
+
+    it('should return empty when cache returns undefined', async () => {
+        cacheMock.get.mockReturnValueOnce(undefined)
+
+        const result: LoadSchedule.Model = await sut.loadByMonth({ month: Month.january })
+
+        expect(result).toHaveLength(0)
+    })
 })
