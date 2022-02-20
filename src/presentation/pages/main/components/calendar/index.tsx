@@ -41,11 +41,6 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
     }
 
     const onSelectSlot = (slotInfo: SlotInfo) => {
-        const newSchedule: Event = {
-          start: new Date(slotInfo.start),
-          end: new Date(slotInfo.end)
-        }
-        setSchedules([...schedules, newSchedule])
         setSelectedSlot(slotInfo)
         setEventModalVisible(true)
     }
@@ -64,11 +59,11 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
 
     const onCloseScheduler = () => {
       setEventModalVisible(false)
-      setSchedules([])
     }
 
     const onScheduleSaved = () => {
       setEventModalVisible(false)
+      loadSchedules()
     }
 
     return (
