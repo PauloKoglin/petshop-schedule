@@ -3,6 +3,7 @@ import { Month } from "../types/enums";
 
 export interface LoadSchedule {
     loadByMonth: (input: LoadSchedule.Input) => Promise<LoadSchedule.Model>
+    loadAll: () => Promise<LoadSchedule.Model>
 }
 
 export namespace LoadSchedule {
