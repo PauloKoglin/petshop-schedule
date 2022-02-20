@@ -53,4 +53,35 @@ describe('LoadScheduleFromCache', () => {
 
         expect(result).toHaveLength(0)
     })
+
+    it('should return all schedules', async () => {
+        const januarySchedule: Schedule = {
+            petName: 'any_name',
+            ownerName: 'any_owner',
+            startDate: new Date('2022-01-15'),
+            endDate: new Date('2022-01-15'),
+            services: [ ScheduleService.shear ]
+        }
+        const februarySchedule: Schedule = {
+            petName: 'any_name',
+            ownerName: 'any_owner',
+            startDate: new Date('2022-02-23'),
+            endDate: new Date('2022-02-23'),
+            services: [ ScheduleService.shower ]
+        }
+        cacheMock.get.mockReturnValueOnce([januarySchedule, februarySchedule])
+
+        const result: LoadSchedule.Model = await sut.loadAll()
+
+        expect(result).toHaveLength(2)
+        expect(result).toEqual([januarySchedule, februarySchedule])
+    })
+
+    it('should return empty array when cache returns undefined', async () => {
+        cacheMock.get.mockReturnValueOnce(undefined)
+
+        const result: LoadSchedule.Model = await sut.loadAll()
+
+        expect(result).toHaveLength(0)
+    })
 })
