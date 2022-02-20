@@ -29,8 +29,8 @@ type ScheduleModalProps = {
 }
 
 type ScheduleState = {
-    name: String,
-    owner: String,
+    name: string,
+    owner: string,
     date: Date,
     startTime: number,
     endTime: number
@@ -44,7 +44,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     onScheduleSaved, 
     onScheduleClose,
     saveSchedule }: ScheduleModalProps) => {
-        
+
     const [visible, setVisible] = useState<boolean>(true)
     const [state] = useState<ScheduleState>({
         name: schedule ? schedule.petName : '',
@@ -61,8 +61,23 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        setVisible(false)
-        onScheduleSaved()
+        const startDate: Date = new Date(state.date)
+        const endDate: Date = new Date(state.date)
+        startDate.setTime(state.startTime)
+        endDate.setTime(state.endTime)
+
+        saveSchedule
+            .perform({
+                petName: state.name,
+                ownerName: state.owner,
+                startDate,
+                endDate,
+                services: []
+            })
+            .then(() => {
+                setVisible(false)
+                onScheduleSaved()
+            })
     }
 
     console.log(state)

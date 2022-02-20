@@ -19,11 +19,15 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
     const [selectedSlot, setSelectedSlot] = useState<SlotInfo>()
 
     useEffect(() => {
+      loadSchedules()
+    }, [])
+
+    const loadSchedules = () => {
         loadSchedule
             .loadByMonth({ month: Month.february})
             .then(schedules => schedules && schedules.length > 0 && mapScheduleToCalendarEvent(schedules))
             .then(events => events && setSchedules(events))
-    }, [])
+    }
 
     const mapScheduleToCalendarEvent = (schedules: LoadSchedule.Model): Event[] => {
       return schedules.map(schedule => {
