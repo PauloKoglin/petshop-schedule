@@ -29,7 +29,7 @@ describe('LocalStorage', () => {
         const value: any = { attribute1: 'attr1', attribute2: 'attr2'}   
         window.localStorage.setItem('any_key', JSON.stringify(value)) 
 
-        const result: Object = sut.get('any_key')
+        const result: any = sut.get('any_key')
 
         expect(result).toEqual(value)
     })
@@ -38,7 +38,7 @@ describe('LocalStorage', () => {
         const value: any = { attribute1: 'attr1', attribute2: 'attr2'}   
         window.localStorage.setItem('any_key', JSON.stringify(value)) 
 
-        const result: Object = sut.get('any_value')
+        const result: any = sut.get('any_value')
 
         expect(result).toBeUndefined()
     })
