@@ -12,7 +12,13 @@ describe('SaveScheduleInCache', () => {
     beforeEach(() => {
         cacheMock = mock()
         loadScheduleMock = mock()
-        loadScheduleMock.loadAll.mockResolvedValue([])
+        loadScheduleMock.loadAll.mockResolvedValue([{
+            petName: 'any_value',
+            ownerName: 'any_value',
+            startDate: new Date(),
+            endDate: new Date(),
+            services: []
+        }])
         sut = new SaveScheduleInCache(cacheMock, loadScheduleMock)
     })
 
@@ -28,5 +34,22 @@ describe('SaveScheduleInCache', () => {
         await sut.perform(input)
 
         expect(loadScheduleMock.loadAll).toBeCalledTimes(1)
+    })
+
+    it('should add input to returned by loadAll', async () => {
+        const input: SaveSchedule.Input = {
+            petName: 'any_value',
+            ownerName: 'any_value',
+            startDate: new Date(),
+            endDate: new Date(),
+            services: []
+        }
+        const expected = [input, input]
+        cacheMock.set.mockImplementation()
+
+        await sut.perform(input)
+
+        expect(cacheMock.set).toBeCalledTimes(1)
+        expect(cacheMock.set).toBeCalledWith('schedules', expected)
     })
 })
