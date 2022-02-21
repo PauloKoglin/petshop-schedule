@@ -54,7 +54,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         endTime: schedule ? schedule.endDate.getTime() : defaultEndTime,
     })
 
-    const onCloseModal = () => {
+    const handleCloseModal = () => {
         setVisible(false)
         onScheduleClose()
     }
@@ -101,11 +101,11 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         })
     }
 
-    return (    
+    return (
         <Modal 
             isOpen={visible}
             closeOnEsc={true}
-            onClose={() => onCloseModal()}>
+            onClose={() => handleCloseModal()}>
             <ModalContent className='scheduler-modal'>
                 <ModalHeader>Scheduler</ModalHeader>
                 <ModalCloseButton />
@@ -136,12 +136,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                                 type='text'
                                 onChange={event => handleTextInputChange('owner', event)}
                             />
-                        </FormControl>                    
+                        </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='date'>Date</FormLabel>
                             <Input 
                                 id='schedule-date' 
-                                defaultValue={formatDate(state.date)} 
+                                defaultValue={formatDate(state.date)}
                                 value={formatDate(state.date)}
                                 type='date'
                                 onChange={event => handleDateInputChange('date', event)}
@@ -166,7 +166,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
-                        <Button variant='ghost' onClick={onCloseModal}>Cancel</Button>
+                        <Button variant='ghost' onClick={handleCloseModal}>Cancel</Button>
                         <Button colorScheme='purple' mr={3} type='submit'>Save</Button>
                     </ModalFooter>
                 </form>
