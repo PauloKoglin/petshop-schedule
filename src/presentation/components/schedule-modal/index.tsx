@@ -1,4 +1,4 @@
-import { formatDate, formatTime } from '../../utils'
+import { formatDate, formatTime, setTimeStringToDate } from '../../utils'
 import { Schedule } from '../../../domain/models/schedule'
 import { SaveSchedule } from '../../../domain/use-cases'
 
@@ -46,7 +46,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     saveSchedule }: ScheduleModalProps) => {
 
     const [visible, setVisible] = useState<boolean>(true)
-    const [state] = useState<ScheduleState>({
+    const [state, setState] = useState<ScheduleState>({
         name: schedule ? schedule.petName : '',
         owner: schedule ? schedule.ownerName : '',
         date: schedule ? schedule.startDate : defaultDate,
@@ -80,7 +80,26 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             })
     }
 
-    console.log(state)
+    const handleTextInputChange = (field: string, event: React.ChangeEvent<HTMLInputElement>) => {
+        setState({
+            ...state,
+            [field]: event.target.value
+        })
+    }
+
+    const handleTimeInputChange = (field: string, event: React.ChangeEvent<HTMLInputElement>) => {
+        setState({
+            ...state,
+            [field]: setTimeStringToDate(state.date, event.target.value)
+        })
+    }
+
+    const handleDateInputChange = (field: string, event: React.ChangeEvent<HTMLInputElement>) => {
+        setState({
+            ...state,
+            [field]: new Date(event.target.value)
+        })
+    }
 
     return (    
         <Modal 
@@ -100,23 +119,50 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         </CheckboxGroup>
                         <FormControl>
                             <FormLabel htmlFor='pet-name'>Pet name</FormLabel>
-                            <Input id='pet-name' defaultValue={state.name.toString()} type='text'></Input>
+                            <Input 
+                                id='pet-name' 
+                                defaultValue={state.name.toString()} 
+                                value={state.name}
+                                type='text'
+                                onChange={event => handleTextInputChange('name', event)}
+                            ></Input>
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='owner-name'>Owner</FormLabel>
-                            <Input id='owner-name' defaultValue={state.owner.toString()} type='text'></Input>
+                            <Input 
+                                id='owner-name' 
+                                defaultValue={state.owner.toString()} 
+                                value={state.owner}
+                                type='text'
+                                onChange={event => handleTextInputChange('owner', event)}
+                            />
                         </FormControl>                    
                         <FormControl>
                             <FormLabel htmlFor='date'>Date</FormLabel>
-                            <Input id='schedule-date' defaultValue={formatDate(state.date)} type='date'></Input>
+                            <Input 
+                                id='schedule-date' 
+                                defaultValue={formatDate(state.date)} 
+                                value={formatDate(state.date)}
+                                type='date'
+                                onChange={event => handleDateInputChange('date', event)}
+                            />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='startTime'>Starts</FormLabel>
-                            <Input id='schedule-startTime' defaultValue={formatTime(state.startTime)} type='time'></Input>
+                            <Input
+                                id='schedule-startTime' 
+                                defaultValue={formatTime(state.startTime)}
+                                type='time'
+                                onChange={event => handleTimeInputChange('startTime', event)}
+                            />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='endTime'>Ends</FormLabel>
-                            <Input id='schedule-endTime' defaultValue={formatTime(state.endTime)} type='time'></Input>
+                            <Input
+                                id='schedule-endTime' 
+                                defaultValue={formatTime(state.endTime)}
+                                type='time'onChange={event => handleTimeInputChange('endTime', event)}
+                            />
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>

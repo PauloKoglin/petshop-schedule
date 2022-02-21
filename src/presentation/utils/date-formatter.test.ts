@@ -1,4 +1,4 @@
-import { formatDate, formatTime } from "./date-formatter"
+import { formatDate, formatTime, setTimeStringToDate } from "./date-formatter"
 
 describe('date-formatter', () => {
     it('should return date in format of yyyy-MM-dd', () => {
@@ -13,5 +13,20 @@ describe('date-formatter', () => {
         const result: String = formatTime(time.getTime())
 
         expect(result).toBe('10:30')
+    })
+
+    it('should return time from the given string time', () => {        
+        const input = '10:30'
+        const time = new Date()
+        time.setHours(10)
+        time.setMinutes(30)
+
+        const result: number = setTimeStringToDate(new Date(), input)
+
+        expect(result).toBe(time.getTime())
+    })
+
+    it('should throw if given string time is empty', () => {
+        expect(() => setTimeStringToDate(new Date(), '')).toThrow()
     })
 })
