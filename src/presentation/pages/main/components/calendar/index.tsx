@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import './styles.css'
 import ScheduleModal from '../../../../components/schedule-modal'
 import { Month } from '../../../../../domain/types/enums'
@@ -36,7 +37,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
       if (selectedEvent) {
         setSelectedSlot(undefined)
       }
-  }, [selectedEvent])
+    }, [selectedEvent])
 
     const loadSchedules = () => {
         loadSchedule
@@ -50,7 +51,8 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
           const event: Event = {
             title: schedule.petName,
             start: schedule.startDate,
-            end: schedule.endDate
+            end: schedule.endDate,
+            resource: schedule
           }
           return event
       })
@@ -76,23 +78,19 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
     const getSelectedSchedule = (): Schedule => {
         return {
             petName: selectedEvent?.title?.toString() ?? '',
-            ownerName: '',
+            ownerName: selectedEvent?.resource?.ownerName,
             startDate: new Date(selectedEvent?.start!),
             endDate: new Date(selectedEvent?.end!),
             services: []
         }
     }
 
-    const getDefaultScheduleDate = (): Date => {
-        return selectedSlot?.start ? new Date(selectedSlot.start) : new Date()
+    const getDefaultScheduleStartDate = (): Date | undefined => {
+      return selectedSlot?.start ? new Date(selectedSlot.start) : undefined
     }
 
-    const getDefaultScheduleStartTime = (): number => {
-      return selectedSlot?.start ? new Date(selectedSlot.start).getTime() : new Date().getTime()
-    }
-
-    const getDefaultScheduleEndTime = (): number => {
-      return selectedSlot?.end ? new Date(selectedSlot.end).getTime() : new Date().getTime()
+    const getDefaultScheduleEndDate = (): Date | undefined => {
+        return selectedSlot?.end ? new Date(selectedSlot.end) : undefined
     }
 
     const onCloseScheduler = () => {
@@ -124,9 +122,8 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
             {
               schedulerModalVisible &&
               <ScheduleModal
-                  defaultDate={getDefaultScheduleDate()}
-                  defaultStartTime={getDefaultScheduleStartTime()}
-                  defaultEndTime={getDefaultScheduleEndTime()}
+                  defaultStartDate={getDefaultScheduleStartDate()}
+                  defaultEndDate={getDefaultScheduleEndDate()}
                   schedule={selectedEvent && getSelectedSchedule()}
                   onScheduleClose={onCloseScheduler} 
                   onScheduleSaved={onScheduleSaved}

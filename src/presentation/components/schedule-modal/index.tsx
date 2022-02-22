@@ -19,9 +19,8 @@ import {
     Stack} from '@chakra-ui/react'
 
 type ScheduleModalProps = {
-    defaultDate: Date,
-    defaultStartTime: number,
-    defaultEndTime: number
+    defaultStartDate?: Date | undefined,
+    defaultEndDate?: Date | undefined
     schedule?: Schedule,
     onScheduleSaved: () => void
     onScheduleClose: () => void
@@ -36,10 +35,9 @@ type ScheduleState = {
     endTime: number
 }
 
-const ScheduleModal: React.FC<ScheduleModalProps> = ({ 
-    defaultDate, 
-    defaultStartTime, 
-    defaultEndTime, 
+const ScheduleModal: React.FC<ScheduleModalProps> = ({
+    defaultStartDate, 
+    defaultEndDate, 
     schedule, 
     onScheduleSaved, 
     onScheduleClose,
@@ -49,9 +47,9 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     const [state, setState] = useState<ScheduleState>({
         name: schedule ? schedule.petName : '',
         owner: schedule ? schedule.ownerName : '',
-        date: schedule ? schedule.startDate : defaultDate,
-        startTime: schedule ? schedule.startDate.getTime() : defaultStartTime,
-        endTime: schedule ? schedule.endDate.getTime() : defaultEndTime,
+        date: schedule?.startDate ?? defaultStartDate ?? new Date(),
+        startTime: schedule?.startDate?.getTime() ?? defaultStartDate?.getTime() ?? new Date().getTime(),
+        endTime: schedule?.endDate?.getTime() ?? defaultEndDate?.getTime() ?? new Date().getTime(),
     })
 
     const handleCloseModal = () => {
@@ -152,6 +150,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             <Input
                                 id='schedule-startTime' 
                                 defaultValue={formatTime(state.startTime)}
+                                value={formatTime(state.startTime)}
                                 type='time'
                                 onChange={event => handleTimeInputChange('startTime', event)}
                             />
@@ -161,6 +160,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             <Input
                                 id='schedule-endTime' 
                                 defaultValue={formatTime(state.endTime)}
+                                value={formatTime(state.endTime)}
                                 type='time'onChange={event => handleTimeInputChange('endTime', event)}
                             />
                         </FormControl>
