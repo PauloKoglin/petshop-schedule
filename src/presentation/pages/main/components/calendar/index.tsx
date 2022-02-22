@@ -3,6 +3,7 @@ import ScheduleModal from '../../../../components/schedule-modal'
 import { Month } from '../../../../../domain/types/enums'
 import { Schedule } from '../../../../../domain/models'
 import { LoadSchedule, SaveSchedule } from '../../../../../domain/use-cases'
+import { getMonthFromDate } from '../../../../utils'
 
 import { useEffect, useState } from 'react'
 import { Calendar as ReactCalendar, SlotInfo, Event, DateLocalizer } from 'react-big-calendar'
@@ -17,12 +18,13 @@ type CalendarProps = {
 const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedule }: CalendarProps) => {
     const [schedules, setSchedules] = useState<Event[]>([])  
     const [schedulerModalVisible, setEventModalVisible] = useState<boolean>(false)
+    const [selectedMonth, setSelectedMonth] = useState<Month>(getMonthFromDate(new Date()))
     const [selectedSlot, setSelectedSlot] = useState<SlotInfo>()
     const [selectedEvent, setSelectedEvent] = useState<Event>()
 
     useEffect(() => {
-      loadSchedules()
-    }, [])
+        loadSchedules()
+    }, [selectedMonth])
 
     useEffect(() => {
         if (selectedSlot) {
@@ -38,7 +40,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
 
     const loadSchedules = () => {
         loadSchedule
-            .loadByMonth({ month: Month.february})
+            .loadByMonth({ month: selectedMonth})
             .then(schedules => schedules && schedules.length > 0 && mapScheduleToCalendarEvent(schedules))
             .then(events => events && setSchedules(events))
     }
@@ -62,6 +64,13 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
     const handleSelectEvent = (event: Event) => {
         setSelectedEvent(event)
         setEventModalVisible(true)
+    }
+
+    const handleCalendarNavigate = (newDate: Date) => {
+      const newMonth = getMonthFromDate(newDate)
+        if (newMonth !== selectedMonth ) {
+            setSelectedMonth(newMonth)
+        }
     }
 
     const getSelectedSchedule = (): Schedule => {
@@ -109,6 +118,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
                 endAccessor="end"
                 onSelectSlot={(slotInfo: SlotInfo) => handleSelectSlot(slotInfo)}
                 onSelectEvent={handleSelectEvent}
+                onNavigate={handleCalendarNavigate}
             >
             </ReactCalendar>
             {

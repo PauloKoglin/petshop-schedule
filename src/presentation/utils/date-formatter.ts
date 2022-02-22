@@ -1,3 +1,5 @@
+import { Month } from '../../domain/types/enums'
+
 import fnsFormat from 'date-fns/format'
 
 export const formatDate = (date: Date): string => {
@@ -15,4 +17,8 @@ export const setTimeStringToDate = (date: Date, time: string): number => {
     const [hours, minutes]: string[] = time.split(':')
     date.setHours(Number(hours), Number(minutes))
     return date.getTime()
+}
+
+export const getMonthFromDate = (date: Date): Month => {
+    return date.getMonth() + 1
 }
