@@ -118,8 +118,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         <FormControl>
                             <FormLabel htmlFor='pet-name'>Pet name</FormLabel>
                             <Input 
-                                id='pet-name' 
-                                defaultValue={state.name.toString()} 
+                                id='pet-name'
                                 value={state.name}
                                 type='text'
                                 onChange={event => handleTextInputChange('name', event)}
@@ -128,8 +127,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         <FormControl>
                             <FormLabel htmlFor='owner-name'>Owner</FormLabel>
                             <Input 
-                                id='owner-name' 
-                                defaultValue={state.owner.toString()} 
+                                id='owner-name'
                                 value={state.owner}
                                 type='text'
                                 onChange={event => handleTextInputChange('owner', event)}
@@ -138,8 +136,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         <FormControl>
                             <FormLabel htmlFor='date'>Date</FormLabel>
                             <Input 
-                                id='schedule-date' 
-                                defaultValue={formatDate(state.date)}
+                                id='schedule-date'
                                 value={formatDate(state.date)}
                                 type='date'
                                 onChange={event => handleDateInputChange('date', event)}
@@ -148,8 +145,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         <FormControl>
                             <FormLabel htmlFor='startTime'>Starts</FormLabel>
                             <Input
-                                id='schedule-startTime' 
-                                defaultValue={formatTime(state.startTime)}
+                                id='schedule-startTime'
                                 value={formatTime(state.startTime)}
                                 type='time'
                                 onChange={event => handleTimeInputChange('startTime', event)}
@@ -158,8 +154,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         <FormControl>
                             <FormLabel htmlFor='endTime'>Ends</FormLabel>
                             <Input
-                                id='schedule-endTime' 
-                                defaultValue={formatTime(state.endTime)}
+                                id='schedule-endTime'
                                 value={formatTime(state.endTime)}
                                 type='time'onChange={event => handleTimeInputChange('endTime', event)}
                             />
