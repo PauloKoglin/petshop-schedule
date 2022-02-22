@@ -24,6 +24,18 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
       loadSchedules()
     }, [])
 
+    useEffect(() => {
+        if (selectedSlot) {
+          setSelectedEvent(undefined)
+        }
+    }, [selectedSlot])
+
+    useEffect(() => {
+      if (selectedEvent) {
+        setSelectedSlot(undefined)
+      }
+  }, [selectedEvent])
+
     const loadSchedules = () => {
         loadSchedule
             .loadByMonth({ month: Month.february})
@@ -105,7 +117,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
                   defaultDate={getDefaultScheduleDate()}
                   defaultStartTime={getDefaultScheduleStartTime()}
                   defaultEndTime={getDefaultScheduleEndTime()}
-                  schedule={getSelectedSchedule()}
+                  schedule={selectedEvent && getSelectedSchedule()}
                   onScheduleClose={onCloseScheduler} 
                   onScheduleSaved={onScheduleSaved}
                   saveSchedule={saveSchedule}
