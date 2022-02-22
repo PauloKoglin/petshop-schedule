@@ -21,7 +21,7 @@ import {
 type ScheduleModalProps = {
     defaultStartDate?: Date | undefined,
     defaultEndDate?: Date | undefined
-    schedule?: Schedule,
+    schedule?: Schedule | undefined,
     onScheduleSaved: () => void
     onScheduleClose: () => void
     saveSchedule: SaveSchedule
@@ -45,8 +45,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     const [visible, setVisible] = useState<boolean>(true)
     const [state, setState] = useState<ScheduleState>({
-        name: schedule ? schedule.petName : '',
-        owner: schedule ? schedule.ownerName : '',
+        name: schedule?.petName ?? '',
+        owner: schedule?.ownerName ?? '',
         date: schedule?.startDate ?? defaultStartDate ?? new Date(),
         startTime: schedule?.startDate?.getTime() ?? defaultStartDate?.getTime() ?? new Date().getTime(),
         endTime: schedule?.endDate?.getTime() ?? defaultEndDate?.getTime() ?? new Date().getTime(),
