@@ -7,6 +7,7 @@ export interface SaveSchedule {
 
 export namespace SaveSchedule {
     export type Input = {
+        id?: string,
         petName: string,
         ownerName: string,
         startDate: Date,
