@@ -43,13 +43,21 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     onScheduleClose,
     saveSchedule }: ScheduleModalProps) => {
 
+    const getTimeFromDate = (date: Date): number => {
+        if (date.getHours() === 0 && date.getMinutes() === 0) {
+            return new Date().getTime()
+        } else {
+            return date.getTime()
+        }
+    }
+
     const [visible, setVisible] = useState<boolean>(true)
     const [state, setState] = useState<ScheduleState>({
         name: schedule?.petName ?? '',
         owner: schedule?.ownerName ?? '',
         date: schedule?.startDate ?? defaultStartDate ?? new Date(),
-        startTime: schedule?.startDate?.getTime() ?? defaultStartDate?.getTime() ?? new Date().getTime(),
-        endTime: schedule?.endDate?.getTime() ?? defaultEndDate?.getTime() ?? new Date().getTime(),
+        startTime: schedule?.startDate?.getTime() ?? getTimeFromDate(defaultStartDate ?? new Date()),
+        endTime: schedule?.endDate?.getTime() ?? getTimeFromDate(defaultEndDate ?? new Date()),
     })
 
     const handleCloseModal = () => {
@@ -156,7 +164,8 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             <Input
                                 id='schedule-endTime'
                                 value={formatTime(state.endTime)}
-                                type='time'onChange={event => handleTimeInputChange('endTime', event)}
+                                type='time'
+                                onChange={event => handleTimeInputChange('endTime', event)}
                             />
                         </FormControl>
                     </ModalBody>
