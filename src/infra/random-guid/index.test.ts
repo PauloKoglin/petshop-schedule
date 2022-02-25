@@ -1,19 +1,10 @@
-import { randomUUID } from "crypto"
-
-interface Guid {
-    generate: () => string
-}
-
-class GuidGenerator implements Guid {
-    public generate(): string {
-        return randomUUID()
-    }
-}
+import { Guid } from "../../domain/use-cases/guid"
+import { RandomGuid } from "."
 
 describe('guid-generator', () => {
 
     it('should generate different guids', () => {
-        const sut: GuidGenerator = new GuidGenerator()
+        const sut: Guid = new RandomGuid()
 
         const generateResult1 = sut.generate()
         const generateResult2 = sut.generate()
