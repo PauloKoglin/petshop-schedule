@@ -1,9 +1,9 @@
-import { Guid } from "../../domain/use-cases/guid"
+import { Guid } from '../../domain/use-cases/guid'
 
-import { randomUUID } from "crypto"
+import { v4 } from 'uuid'
 
 export class RandomGuid implements Guid {
     public generate(): string {
-        return randomUUID()
+        return v4()
     }
 }
