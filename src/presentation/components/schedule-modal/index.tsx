@@ -69,8 +69,12 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         event.preventDefault()
         const startDate: Date = new Date(state.date)
         const endDate: Date = new Date(state.date)
-        startDate.setTime(state.startTime)
-        endDate.setTime(state.endTime)
+        const startTime: Date = new Date(state.startTime)
+        const endTime: Date = new Date(state.endTime)
+        startDate.setHours(startTime.getHours())
+        startDate.setMinutes(startTime.getMinutes())
+        endDate.setHours(endTime.getHours())
+        endDate.setMinutes(endTime.getMinutes())
 
         saveSchedule
             .perform({
