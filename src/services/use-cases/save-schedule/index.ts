@@ -12,16 +12,28 @@ export class SaveScheduleInCache implements SaveSchedule {
     ) {}
 
     public async perform(input: SaveSchedule.Input): Promise<SaveSchedule.Model> {
-        const id: string = this.guid.generate()
-
         let schedules: LoadSchedule.Model = await this.loadSchedule.loadAll()
-
-        const newSchedule: SaveSchedule.Input = {
-            ...input,
-            id
+        let newSchedule: SaveSchedule.Input
+        let id: string = '';
+        if (!input.id) {
+            id = this.guid.generate()
+            newSchedule = {
+                ...input,
+                id
+            }
+    
+            schedules.push(newSchedule)
+        } else {
+            id = input.id
+            newSchedule = input
+            schedules = schedules.map(schedule => {
+                if (schedule.id === id) {
+                    return input
+                }
+                return schedule
+            })
         }
-
-        schedules.push(newSchedule)
+        
         this.cache.set(SaveScheduleInCache.fieldName, schedules)
         return Promise.resolve(newSchedule)
     }    

@@ -16,7 +16,7 @@ describe('SaveScheduleInCache', () => {
         guidMock = mock()
         loadScheduleMock = mock()
         loadScheduleMock.loadAll.mockResolvedValue([{
-            id: 'any_guid',
+            id: '',
             petName: 'any_value',
             ownerName: 'any_value',
             startDate: new Date(),
@@ -43,17 +43,25 @@ describe('SaveScheduleInCache', () => {
 
     it('should add input to returned by loadAll', async () => {
         const input: SaveSchedule.Input = {
-            id: 'any_guid',
+            id: '',
             petName: 'any_value',
             ownerName: 'any_value',
             startDate: new Date('2022-01-01'),
             endDate: new Date('2022-01-02'),
             services: []
         }
-        const expected = [input, input]
+        const existingSchedule: SaveSchedule.Input = {
+            id: 'any_id',
+            petName: 'existing_pet',
+            ownerName: 'existing_owner',
+            startDate: new Date('2022-01-01'),
+            endDate: new Date('2022-01-02'),
+            services: []
+        }
+        const expected = [existingSchedule, {...input, id: 'any_guid'}]
         cacheMock.set.mockImplementation()
-        loadScheduleMock.loadAll.mockResolvedValueOnce([{ ...input }])
-        guidMock.generate.mockReturnValue('any_guid')
+        loadScheduleMock.loadAll.mockResolvedValueOnce([existingSchedule])
+        guidMock.generate.mockReturnValueOnce('any_guid')
 
         await sut.perform(input)
 
@@ -61,7 +69,7 @@ describe('SaveScheduleInCache', () => {
         expect(cacheMock.set).toBeCalledWith('schedules', expected)
     })
 
-    it('should call guid.generate once', async () => {
+    it('should call guid.generate once if no id is provided', async () => {
         const input: SaveSchedule.Input = {
             id: '',
             petName: 'any_value',
@@ -75,5 +83,30 @@ describe('SaveScheduleInCache', () => {
         await sut.perform(input)
 
         expect(guidMock.generate).toBeCalledTimes(1)
+    })
+
+    it('should call save existing schedule if valid id is provided', async () => {
+        const input: SaveSchedule.Input = {
+            id: 'any_valid_id',
+            petName: 'new_petname',
+            ownerName: 'any_value',
+            startDate: new Date(),
+            endDate: new Date(),
+            services: []
+        }
+        guidMock.generate.mockImplementation()
+        loadScheduleMock.loadAll.mockResolvedValueOnce([{
+            id: 'any_valid_id',
+            petName: 'old_petname',
+            ownerName: 'any_value',
+            startDate: new Date(),
+            endDate: new Date(),
+            services: []
+        }])
+
+        await sut.perform(input)
+
+        expect(cacheMock.set).toBeCalledTimes(1)
+        expect(cacheMock.set).toBeCalledWith('schedules', [input])
     })
 })
