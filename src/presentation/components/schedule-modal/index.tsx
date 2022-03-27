@@ -28,6 +28,7 @@ type ScheduleModalProps = {
 }
 
 type ScheduleState = {
+    id?: string,
     name: string,
     owner: string,
     date: Date,
@@ -53,6 +54,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     const [visible, setVisible] = useState<boolean>(true)
     const [state, setState] = useState<ScheduleState>({
+        id: schedule?.id,
         name: schedule?.petName ?? '',
         owner: schedule?.ownerName ?? '',
         date: schedule?.startDate ?? defaultStartDate ?? new Date(),
@@ -78,6 +80,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
         saveSchedule
             .perform({
+                id: state.id,
                 petName: state.name,
                 ownerName: state.owner,
                 startDate,

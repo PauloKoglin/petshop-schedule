@@ -77,6 +77,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
 
     const getSelectedSchedule = (): Schedule => {
         return {
+            id: (selectedEvent?.resource as Schedule).id,
             petName: selectedEvent?.title?.toString() ?? '',
             ownerName: selectedEvent?.resource?.ownerName,
             startDate: new Date(selectedEvent?.start!),

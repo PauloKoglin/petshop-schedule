@@ -18,6 +18,7 @@ export class LoadScheduleFromCache implements LoadSchedule {
 
     private mapToSchedule(value: any): Schedule {
         return {
+            id: value.id,
             petName: value.petName,
             ownerName: value.ownerName,
             startDate: new Date(value.startDate),
