@@ -6,7 +6,7 @@ import { Schedule } from '../../../../../domain/models'
 import { LoadSchedule, SaveSchedule } from '../../../../../domain/use-cases'
 import { getMonthFromDate } from '../../../../utils'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { Calendar as ReactCalendar, SlotInfo, Event, DateLocalizer } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
@@ -103,6 +103,16 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
       loadSchedules()
     }
 
+    const eventPropGetter = useCallback(
+      () => ({
+        style: {
+          backgroundColor: '#3B19',
+          borderWidth: '0'
+        },
+      }),
+      []
+    )
+
     return (
         <div className='calendar'>
             <ReactCalendar
@@ -118,6 +128,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
                 onSelectSlot={(slotInfo: SlotInfo) => handleSelectSlot(slotInfo)}
                 onSelectEvent={handleSelectEvent}
                 onNavigate={handleCalendarNavigate}
+                eventPropGetter={eventPropGetter}
             >
             </ReactCalendar>
             {
