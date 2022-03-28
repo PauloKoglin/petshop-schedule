@@ -31,6 +31,12 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
         if (selectedSlot) {
           setSelectedEvent(undefined)
         }
+        const temporaryEvent: Event = {
+          title: 'new schedule',
+          start: selectedSlot ? new Date(selectedSlot.start) : new Date(),
+          end: selectedSlot ? new Date(selectedSlot.end) : new Date(),
+        }
+        setSchedules([...schedules, temporaryEvent])
     }, [selectedSlot])
 
     useEffect(() => {
@@ -96,6 +102,8 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
 
     const onCloseScheduler = () => {
       setEventModalVisible(false)
+      const cleanedSchedules: Event[] = schedules.filter(event => event.resource)
+      setSchedules(cleanedSchedules)
     }
 
     const onScheduleSaved = () => {
