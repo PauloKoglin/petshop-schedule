@@ -2,7 +2,7 @@ import { formatDate, formatTime, setTimeStringToDate } from '../../utils'
 import { Schedule } from '../../../domain/models/schedule'
 import { SaveSchedule } from '../../../domain/use-cases'
 
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { 
     Button, 
     Checkbox, 
@@ -52,6 +52,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         }
     }
 
+    const firstInputRef = useRef(null)
     const [visible, setVisible] = useState<boolean>(true)
     const [state, setState] = useState<ScheduleState>({
         id: schedule?.id,
@@ -117,12 +118,13 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     return (
         <Modal
             isOpen={visible}
+            isCentered
             closeOnEsc={true}
-            onClose={() => handleCloseModal()}>
+            onClose={() => handleCloseModal()}
+            initialFocusRef={firstInputRef}>
             <ModalContent 
                 className='scheduler-modal'
-                boxShadow={'dark-lg'}
-                >
+                boxShadow={'dark-lg'}>
                 <ModalHeader>Scheduler</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit}>
@@ -136,6 +138,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                         <FormControl>
                             <FormLabel htmlFor='pet-name'>Pet name</FormLabel>
                             <Input 
+                                ref={firstInputRef}
                                 id='pet-name'
                                 value={state.name}
                                 type='text'
