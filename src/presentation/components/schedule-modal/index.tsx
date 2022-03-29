@@ -115,11 +115,14 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
     }
 
     return (
-        <Modal 
+        <Modal
             isOpen={visible}
             closeOnEsc={true}
             onClose={() => handleCloseModal()}>
-            <ModalContent className='scheduler-modal'>
+            <ModalContent 
+                className='scheduler-modal'
+                boxShadow={'dark-lg'}
+                >
                 <ModalHeader>Scheduler</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit}>
