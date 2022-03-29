@@ -129,7 +129,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit}>
                     <ModalBody>
-                        <CheckboxGroup colorScheme='purple' defaultValue={['Shower']}>
+                        <CheckboxGroup colorScheme='purple' defaultValue={['shower']}>
                             <Stack spacing={[1, 5]} direction={['column', 'row']}>
                                 <Checkbox value='shower'>Shower</Checkbox>
                                 <Checkbox value='shear'>Shear</Checkbox>
