@@ -1,12 +1,13 @@
 import { formatDate, formatTime, setTimeStringToDate } from '../../utils'
 import { Schedule } from '../../../domain/models/schedule'
+import { ScheduleService } from '../../../domain/types/enums'
 import { SaveSchedule } from '../../../domain/use-cases'
+import ServiceSelector, { Option } from '../service-selector'
 
 import React, { useRef, useState } from 'react'
+import { FaCut, FaShower } from 'react-icons/fa'
 import { 
     Button, 
-    Checkbox, 
-    CheckboxGroup, 
     FormControl, 
     FormLabel, 
     Input, 
@@ -15,8 +16,8 @@ import {
     ModalCloseButton, 
     ModalContent, 
     ModalFooter, 
-    ModalHeader,
-    Stack} from '@chakra-ui/react'
+    ModalHeader
+} from '@chakra-ui/react'
 
 type ScheduleModalProps = {
     defaultStartDate?: Date | undefined,
@@ -33,7 +34,8 @@ type ScheduleState = {
     owner: string,
     date: Date,
     startTime: number,
-    endTime: number
+    endTime: number,
+    services: ScheduleService[]
 }
 
 const ScheduleModal: React.FC<ScheduleModalProps> = ({
@@ -61,6 +63,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         date: schedule?.startDate ?? defaultStartDate ?? new Date(),
         startTime: schedule?.startDate?.getTime() ?? getTimeFromDate(defaultStartDate ?? new Date()),
         endTime: schedule?.endDate?.getTime() ?? getTimeFromDate(defaultEndDate ?? new Date()),
+        services: schedule?.services ?? []
     })
 
     const handleCloseModal = () => {
@@ -86,7 +89,7 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                 ownerName: state.owner,
                 startDate,
                 endDate,
-                services: []
+                services: state.services
             })
             .then(() => {
                 setVisible(false)
@@ -115,6 +118,18 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
         })
     }
 
+    const handleServicesChange = (selectedServices: Option[]) => {
+        setState({
+            ...state,
+            services: selectedServices.map(option => option.displayName.toLowerCase() as ScheduleService)
+        })
+    }
+
+    const options: Option[] = [
+        { id: '1', displayName: 'Shower', icon: FaShower, selected: state.services.includes(ScheduleService.shower) },
+        { id: '2', displayName: 'Shear' , icon: FaCut, selected: state.services.includes(ScheduleService.shear) },
+    ]
+
     return (
         <Modal
             isOpen={visible}
@@ -129,12 +144,10 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                 <ModalCloseButton />
                 <form onSubmit={handleSubmit}>
                     <ModalBody>
-                        <CheckboxGroup colorScheme='purple' defaultValue={['shower']}>
-                            <Stack spacing={[1, 5]} direction={['column', 'row']}>
-                                <Checkbox value='shower'>Shower</Checkbox>
-                                <Checkbox value='shear'>Shear</Checkbox>
-                            </Stack>
-                        </CheckboxGroup>
+                        <ServiceSelector 
+                            options={options} 
+                            onSelectionChanged={handleServicesChange}
+                            />
                         <FormControl>
                             <FormLabel htmlFor='pet-name'>Pet name</FormLabel>
                             <Input 

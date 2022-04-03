@@ -88,7 +88,7 @@ const Calendar: React.FC<CalendarProps> = ({ localizer, loadSchedule, saveSchedu
             ownerName: selectedEvent?.resource?.ownerName,
             startDate: new Date(selectedEvent?.start!),
             endDate: new Date(selectedEvent?.end!),
-            services: []
+            services: selectedEvent?.resource.services
         }
     }
 
