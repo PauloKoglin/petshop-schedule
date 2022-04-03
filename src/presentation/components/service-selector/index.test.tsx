@@ -1,21 +1,36 @@
 import ServiceSelector, { Option } from '.'
 
 import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { FaCut, FaShower } from 'react-icons/fa'
 
 describe('service-selector', () => {
+    const options: Option[] = [
+        { id: '1', displayName: 'Shower', icon: FaShower },
+        { id: '2', displayName: 'Shear' , icon: FaCut },
+    ]
 
     it('should render options given in the props', () => {
-        const options: Option[] = [
-            { id: '1', displayName: 'Shower' },
-            { id: '2', displayName: 'Shear' },
-        ]
         render(
             <ServiceSelector options={options}/>
         )
 
         expect(screen.getByText('Shower')).toBeInTheDocument()
         expect(screen.getByText('Shear')).toBeInTheDocument()
+    })
+
+    it('should return selected services when option is clicked', () => {
+        const onSelectionChanged = jest.fn()
+        render(
+            <ServiceSelector 
+                options={options}
+                onSelectionChanged={onSelectionChanged}/>
+        )
+
+        fireEvent.click(screen.getByText('Shower'))
+
+        expect(onSelectionChanged).toBeCalledTimes(1)
+        expect(onSelectionChanged).toBeCalledWith([{...options[0], selected: true}])
     })
 
 })

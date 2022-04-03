@@ -1,24 +1,82 @@
-import React from 'react'
+import { Box, Flex, HStack, Icon } from '@chakra-ui/react'
+import React, { useState } from 'react'
+import { IconType } from 'react-icons'
+
+const optionDefaultProps = {
+    shadow: 'md',
+    borderWidth:'1px',
+    flex:'1',
+    borderRadius:'md',
+    padding:3,
+    display:'flex',
+    justifyContent:'center',
+    cursor: 'pointer'
+}
 
 export type Option = {
-    id: string,
+    id: string
     displayName: string
+    icon: IconType
+    selected?: boolean
 }
 
 type ServiceSelectorProps = {
     options: Option[]
+    onSelectionChanged?: (selectedOptions: Option[]) => void
 }
 
-const ServiceSelector: React.FC<ServiceSelectorProps> = ({ options }) => {
+type ServiceSelectorState = {
+    options: Option[]
+}
+
+const ServiceSelector: React.FC<ServiceSelectorProps> = ({ options, onSelectionChanged }: ServiceSelectorProps) => {
+
+    const [state, setState] = useState<ServiceSelectorState>({
+        options: options.map(option => ({
+            ...option,
+            selected: option.selected === undefined ? false : option.selected
+        }))
+    })
+
+    const handleOptionClick = (event: React.MouseEvent<HTMLDivElement>) => {
+        const selectedOptions: Option[] = state.options.map(option => ({
+            ...option,
+            selected: event.currentTarget.id === option.id ? !option.selected : option.selected
+        }))
+        setState({ options: selectedOptions })
+        onSelectionChanged?.(selectedOptions.filter(option => option.selected))
+    }
+
+    const isOptionSelected = (id: string): boolean => {
+        return state.options.some(option => option.id === id && option.selected)
+    }
 
     const getOptions = () => {
-        return options.map((option: Option) => (<div key={option.id}>{option.displayName}</div>))
+        return state.options.map((option: Option) => (
+            <Box
+                {...optionDefaultProps}
+                id={option.id}
+                key={option.id}
+                backgroundColor={isOptionSelected(option.id) ? '#3B19' : 'transparent'}
+                onClick={event => handleOptionClick(event)}
+                >
+                <Flex direction={'column'}>
+                    <Icon
+                        as={option.icon as any}
+                        alignSelf={'center'}
+                        boxSize={10}
+                        color={'darkorchid'}
+                    />
+                    <label style={{alignItems: "center"}}>{option.displayName}</label>
+                </Flex>
+            </Box>
+        ))
     }
 
     return (
-        <div >
+        <HStack spacing={[2, 4]} >
             {getOptions()}
-        </div>
+        </HStack>
     )
 }
 
