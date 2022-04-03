@@ -1,5 +1,5 @@
+import { FC as ReactFC, useState } from 'react'
 import { Box, Flex, HStack, Icon } from '@chakra-ui/react'
-import React, { useState } from 'react'
 import { IconType } from 'react-icons'
 
 const optionDefaultProps = {
@@ -29,7 +29,7 @@ type ServiceSelectorState = {
     options: Option[]
 }
 
-const ServiceSelector: React.FC<ServiceSelectorProps> = ({ options, onSelectionChanged }: ServiceSelectorProps) => {
+const ServiceSelector: ReactFC<ServiceSelectorProps> = ({ options, onSelectionChanged }: ServiceSelectorProps) => {
 
     const [state, setState] = useState<ServiceSelectorState>({
         options: options.map(option => ({
