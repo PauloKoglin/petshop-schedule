@@ -1,7 +1,6 @@
 import { FC as ReactFC, useState } from 'react'
 import { Box, Flex, HStack, Icon } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
-import { warn } from 'console'
 
 const optionDefaultProps = {
     shadow: 'md',
