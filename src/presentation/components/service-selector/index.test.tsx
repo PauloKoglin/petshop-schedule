@@ -33,4 +33,22 @@ describe('service-selector', () => {
         expect(onSelectionChanged).toBeCalledWith([{...options[0], selected: true}])
     })
 
+    it('should return empty when option is unselected', () => {
+        const optionsWithSelectedItem: Option[] = [
+            { id: '1', displayName: 'Shower', icon: FaShower, selected: true },
+            { id: '2', displayName: 'Shear' , icon: FaCut },
+        ]
+        const onSelectionChanged = jest.fn()
+        render(
+            <ServiceSelector 
+                options={optionsWithSelectedItem}
+                onSelectionChanged={onSelectionChanged}/>
+        )
+
+        fireEvent.click(screen.getByText('Shower'))
+
+        expect(onSelectionChanged).toBeCalledTimes(1)
+        expect(onSelectionChanged).toBeCalledWith([])
+    })
+
 })
