@@ -1,6 +1,7 @@
 import { FC as ReactFC, useState } from 'react'
 import { Box, Flex, HStack, Icon } from '@chakra-ui/react'
 import { IconType } from 'react-icons'
+import { warn } from 'console'
 
 const optionDefaultProps = {
     shadow: 'md',
@@ -30,6 +31,8 @@ type ServiceSelectorState = {
 }
 
 const ServiceSelector: ReactFC<ServiceSelectorProps> = ({ options, onSelectionChanged }: ServiceSelectorProps) => {
+
+    options.length === 0 && console.warn('The ServiceSelector must have at least one option.')
 
     const [state, setState] = useState<ServiceSelectorState>({
         options: options.map(option => ({
