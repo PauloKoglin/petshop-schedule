@@ -19,32 +19,31 @@ import {
     ModalHeader
 } from '@chakra-ui/react'
 
-type ScheduleModalProps = {
-    defaultStartDate?: Date | undefined,
-    defaultEndDate?: Date | undefined
-    schedule?: Schedule | undefined,
-    onScheduleSaved: () => void
-    onScheduleClose: () => void
-    saveSchedule: SaveSchedule
+namespace ScheduleModalTypes {
+    export type InputField<V> = {
+        name: string,
+        value: V,
+        required?: boolean,
+        valid?: boolean
+    }
+
+    export type Props = {
+        defaultStartDate?: Date | undefined,
+        defaultEndDate?: Date | undefined
+        schedule?: Schedule | undefined,
+        onScheduleSaved: () => void
+        onScheduleClose: () => void
+        saveSchedule: SaveSchedule
+    }
 }
 
-type ScheduleState = {
-    id?: string,
-    name: string,
-    owner: string,
-    date: Date,
-    startTime: number,
-    endTime: number,
-    services: ScheduleService[]
-}
-
-const ScheduleModal: React.FC<ScheduleModalProps> = ({
+const ScheduleModal: React.FC<ScheduleModalTypes.Props> = ({
     defaultStartDate, 
     defaultEndDate, 
     schedule, 
     onScheduleSaved, 
     onScheduleClose,
-    saveSchedule }: ScheduleModalProps) => {
+    saveSchedule }: ScheduleModalTypes.Props) => {
 
     const getTimeFromDate = (date: Date): number => {
         if (date.getHours() === 0 && date.getMinutes() === 0) {
@@ -56,14 +55,34 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     const firstInputRef = useRef(null)
     const [visible, setVisible] = useState<boolean>(true)
-    const [state, setState] = useState<ScheduleState>({
-        id: schedule?.id,
-        name: schedule?.petName ?? '',
-        owner: schedule?.ownerName ?? '',
-        date: schedule?.startDate ?? defaultStartDate ?? new Date(),
-        startTime: schedule?.startDate?.getTime() ?? getTimeFromDate(defaultStartDate ?? new Date()),
-        endTime: schedule?.endDate?.getTime() ?? getTimeFromDate(defaultEndDate ?? new Date()),
-        services: schedule?.services ?? []
+    const [name, setName] = useState<ScheduleModalTypes.InputField<string>>({
+        name: 'name',
+        value: schedule?.petName ?? '',
+        required: true
+    })
+    const [owner, setOwner] = useState<ScheduleModalTypes.InputField<string>>({
+        name: 'owner',
+        value: schedule?.ownerName ?? ''
+    })
+    const [date, setDate] = useState<ScheduleModalTypes.InputField<Date>>({
+        name: 'date',
+        value: schedule?.startDate ?? defaultStartDate ?? new Date(),
+        required: true
+    })
+    const [startTime, setStartTime] = useState<ScheduleModalTypes.InputField<number>>({
+        name: 'startTime',
+        value: schedule?.startDate?.getTime() ?? getTimeFromDate(defaultStartDate ?? new Date()),
+        required: true
+    })
+    const [endTime, setEndTime] = useState<ScheduleModalTypes.InputField<number>>({
+        name: 'endTime',
+        value: schedule?.endDate?.getTime() ?? getTimeFromDate(defaultEndDate ?? new Date()),
+        required: true
+    })  
+    const [services, setServices] = useState<ScheduleModalTypes.InputField<ScheduleService[]>>({
+        name: 'services',
+        value: schedule?.services ?? [],
+        required: true
     })
 
     const handleCloseModal = () => {
@@ -73,23 +92,23 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        const startDate: Date = new Date(state.date)
-        const endDate: Date = new Date(state.date)
-        const startTime: Date = new Date(state.startTime)
-        const endTime: Date = new Date(state.endTime)
-        startDate.setHours(startTime.getHours())
-        startDate.setMinutes(startTime.getMinutes())
-        endDate.setHours(endTime.getHours())
-        endDate.setMinutes(endTime.getMinutes())
+        const startDate: Date = new Date(date.value)
+        const endDate: Date = new Date(date.value)
+        const newStartTime: Date = new Date(startTime.value)
+        const newEndTime: Date = new Date(endTime.value)
+        startDate.setHours(newStartTime.getHours())
+        startDate.setMinutes(newStartTime.getMinutes())
+        endDate.setHours(newEndTime.getHours())
+        endDate.setMinutes(newEndTime.getMinutes())
 
         saveSchedule
             .perform({
-                id: state.id,
-                petName: state.name,
-                ownerName: state.owner,
+                id: schedule?.id,
+                petName: name.value,
+                ownerName: owner.value,
                 startDate,
                 endDate,
-                services: state.services
+                services: services.value
             })
             .then(() => {
                 setVisible(false)
@@ -97,37 +116,16 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
             })
     }
 
-    const handleTextInputChange = (field: string, event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            [field]: event.target.value
-        })
-    }
-
-    const handleTimeInputChange = (field: string, event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            [field]: setTimeStringToDate(state.date, event.target.value)
-        })
-    }
-
-    const handleDateInputChange = (field: string, event: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            [field]: new Date(event.target.value)
-        })
-    }
-
     const handleServicesChange = (selectedServices: Option[]) => {
-        setState({
-            ...state,
-            services: selectedServices.map(option => option.displayName.toLowerCase() as ScheduleService)
+        setServices({
+            ...services,
+            value: selectedServices.map(option => option.displayName.toLowerCase() as ScheduleService)
         })
     }
 
     const options: Option[] = [
-        { id: '1', displayName: 'Shower', icon: FaShower, selected: state.services.includes(ScheduleService.shower) },
-        { id: '2', displayName: 'Shear' , icon: FaCut, selected: state.services.includes(ScheduleService.shear) },
+        { id: '1', displayName: 'Shower', icon: FaShower, selected: services.value.includes(ScheduleService.shower) },
+        { id: '2', displayName: 'Shear' , icon: FaCut, selected: services.value.includes(ScheduleService.shear) },
     ]
 
     return (
@@ -153,45 +151,45 @@ const ScheduleModal: React.FC<ScheduleModalProps> = ({
                             <Input 
                                 ref={firstInputRef}
                                 id='pet-name'
-                                value={state.name}
+                                value={name.value}
                                 type='text'
-                                onChange={event => handleTextInputChange('name', event)}
+                                onChange={event => setName({...name, value: event.target.value})}
                             ></Input>
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='owner-name'>Owner</FormLabel>
                             <Input 
                                 id='owner-name'
-                                value={state.owner}
+                                value={owner.value}
                                 type='text'
-                                onChange={event => handleTextInputChange('owner', event)}
+                                onChange={event => setOwner({ ...owner, value: event.target.value })}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='date'>Date</FormLabel>
                             <Input 
                                 id='schedule-date'
-                                value={formatDate(state.date)}
+                                value={formatDate(date.value)}
                                 type='date'
-                                onChange={event => handleDateInputChange('date', event)}
+                                onChange={event => setDate({ ...date, value: new Date(event.target.value)})}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='startTime'>Starts</FormLabel>
                             <Input
                                 id='schedule-startTime'
-                                value={formatTime(state.startTime)}
+                                value={formatTime(startTime.value)}
                                 type='time'
-                                onChange={event => handleTimeInputChange('startTime', event)}
+                                onChange={event => setStartTime({ ...startTime, value: setTimeStringToDate(date.value, event.target.value)})}
                             />
                         </FormControl>
                         <FormControl>
                             <FormLabel htmlFor='endTime'>Ends</FormLabel>
                             <Input
                                 id='schedule-endTime'
-                                value={formatTime(state.endTime)}
+                                value={formatTime(endTime.value)}
                                 type='time'
-                                onChange={event => handleTimeInputChange('endTime', event)}
+                                onChange={event => setEndTime({ ...endTime, value: setTimeStringToDate(date.value, event.target.value)})}
                             />
                         </FormControl>
                     </ModalBody>
