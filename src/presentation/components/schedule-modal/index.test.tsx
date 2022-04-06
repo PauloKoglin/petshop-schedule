@@ -53,4 +53,13 @@ describe('<ScheduleModal />', () => {
 
         expect(nameInput).toHaveValue('2022-04-06')
     })
+
+    it('should be able to enter time into start-time input', () => {
+        render(makeComponent())
+        const nameInput = screen.getByTestId('schedule-modal-start-time')
+
+        fireEvent.change(nameInput, {target: {value: '10:30'}})
+
+        expect(nameInput).toHaveValue('10:30')
+    })
 })

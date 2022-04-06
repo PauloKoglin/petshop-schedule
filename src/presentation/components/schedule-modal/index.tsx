@@ -178,9 +178,10 @@ const ScheduleModal: React.FC<ScheduleModalTypes.Props> = ({
                             />
                         </FormControl>
                         <FormControl>
-                            <FormLabel htmlFor='startTime'>Starts</FormLabel>
+                            <FormLabel htmlFor='schedule-modal-start-time'>Starts</FormLabel>
                             <Input
-                                id='schedule-startTime'
+                                data-testid='schedule-modal-start-time'
+                                id='schedule-modal-start-time'
                                 value={formatTime(startTime.value)}
                                 type='time'
                                 onChange={event => setStartTime({ ...startTime, value: setTimeStringToDate(date.value, event.target.value)})}
