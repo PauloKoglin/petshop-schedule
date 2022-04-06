@@ -44,4 +44,13 @@ describe('<ScheduleModal />', () => {
 
         expect(nameInput).toHaveValue('any text')
     })
+
+    it('should be able to enter date into date input', () => {
+        render(makeComponent())
+        const nameInput = screen.getByTestId('schedule-modal-date')
+
+        fireEvent.change(nameInput, {target: {value: '2022-04-06'}})
+
+        expect(nameInput).toHaveValue('2022-04-06')
+    })
 })

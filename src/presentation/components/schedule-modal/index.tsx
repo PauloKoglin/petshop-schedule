@@ -168,9 +168,10 @@ const ScheduleModal: React.FC<ScheduleModalTypes.Props> = ({
                             />
                         </FormControl>
                         <FormControl>
-                            <FormLabel htmlFor='date'>Date</FormLabel>
-                            <Input 
-                                id='schedule-date'
+                            <FormLabel htmlFor='schedule-modal-date'>Date</FormLabel>
+                            <Input
+                                data-testid='schedule-modal-date'
+                                id='schedule-modal-date'
                                 value={formatDate(date.value)}
                                 type='date'
                                 onChange={event => setDate({ ...date, value: new Date(event.target.value)})}
