@@ -188,9 +188,10 @@ const ScheduleModal: React.FC<ScheduleModalTypes.Props> = ({
                             />
                         </FormControl>
                         <FormControl>
-                            <FormLabel htmlFor='endTime'>Ends</FormLabel>
+                            <FormLabel htmlFor='schedule-modal-end-time'>Ends</FormLabel>
                             <Input
-                                id='schedule-endTime'
+                                data-testid='schedule-modal-end-time'
+                                id='schedule-modal-end-time'
                                 value={formatTime(endTime.value)}
                                 type='time'
                                 onChange={event => setEndTime({ ...endTime, value: setTimeStringToDate(date.value, event.target.value)})}

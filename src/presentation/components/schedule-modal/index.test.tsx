@@ -62,4 +62,13 @@ describe('<ScheduleModal />', () => {
 
         expect(nameInput).toHaveValue('10:30')
     })
+
+    it('should be able to enter time into end-time input', () => {
+        render(makeComponent())
+        const nameInput = screen.getByTestId('schedule-modal-end-time')
+
+        fireEvent.change(nameInput, {target: {value: '11:30'}})
+
+        expect(nameInput).toHaveValue('11:30')
+    })
 })
