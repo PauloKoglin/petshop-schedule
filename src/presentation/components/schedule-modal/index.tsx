@@ -147,10 +147,11 @@ const ScheduleModal: React.FC<ScheduleModalTypes.Props> = ({
                             onSelectionChanged={handleServicesChange}
                             />
                         <FormControl>
-                            <FormLabel htmlFor='pet-name'>Pet name</FormLabel>
+                            <FormLabel htmlFor='name-input'>Pet name</FormLabel>
                             <Input 
+                                data-testid='name-input'
+                                id='name-input'
                                 ref={firstInputRef}
-                                id='pet-name'
                                 value={name.value}
                                 type='text'
                                 onChange={event => setName({...name, value: event.target.value})}
