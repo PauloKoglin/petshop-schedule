@@ -1,10 +1,10 @@
 import ScheduleModal from "."
 import { SaveSchedule } from "../../../domain/use-cases"
 
-import { screen, render } from "@testing-library/react"
+import { screen, render, fireEvent } from "@testing-library/react"
 import { mock, MockProxy } from "jest-mock-extended"
 
-const makeSut = () => {
+const makeComponent = () => {
     const onScheduleClose = jest.fn()
     const onScheduleSaved = jest.fn()
     const saveScheduleMock: MockProxy<SaveSchedule> = mock() 
@@ -20,11 +20,19 @@ const makeSut = () => {
 
 describe('<ScheduleModal />', () => {
     it('should set the cursor position to field name on show', () => {
-        const sut = makeSut()
-        render(sut)
+        render(makeComponent())
 
         const nameInput = screen.getByTestId('schedule-modal-name')
 
         expect(nameInput).toHaveFocus()
+    })
+
+    it('should be able to enter text into name input', () => {
+        render(makeComponent())
+        const nameInput = screen.getByTestId('schedule-modal-name')
+
+        fireEvent.change(nameInput, {target: {value: 'any text'}})
+
+        expect(nameInput).toHaveValue('any text')
     })
 })
