@@ -23,7 +23,7 @@ describe('<ScheduleModal />', () => {
         const sut = makeSut()
         render(sut)
 
-        const nameInput = screen.getByTestId('name-input')
+        const nameInput = screen.getByTestId('schedule-modal-name')
 
         expect(nameInput).toHaveFocus()
     })
