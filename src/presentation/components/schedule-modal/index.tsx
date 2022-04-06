@@ -158,9 +158,10 @@ const ScheduleModal: React.FC<ScheduleModalTypes.Props> = ({
                             ></Input>
                         </FormControl>
                         <FormControl>
-                            <FormLabel htmlFor='owner-name'>Owner</FormLabel>
+                            <FormLabel htmlFor='schedule-modal-owner'>Owner</FormLabel>
                             <Input 
-                                id='owner-name'
+                                data-testid='schedule-modal-owner'
+                                id='schedule-modal-owner'
                                 value={owner.value}
                                 type='text'
                                 onChange={event => setOwner({ ...owner, value: event.target.value })}

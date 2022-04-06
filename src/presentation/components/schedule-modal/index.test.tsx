@@ -35,4 +35,13 @@ describe('<ScheduleModal />', () => {
 
         expect(nameInput).toHaveValue('any text')
     })
+
+    it('should be able to enter text into owner input', () => {
+        render(makeComponent())
+        const nameInput = screen.getByTestId('schedule-modal-owner')
+
+        fireEvent.change(nameInput, {target: {value: 'any text'}})
+
+        expect(nameInput).toHaveValue('any text')
+    })
 })
